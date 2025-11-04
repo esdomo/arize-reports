@@ -1,0 +1,16 @@
+# Arize Phoenix Session Cost Analyzer Requirements
+
+# Core Phoenix packages
+arize-phoenix>=12.9.0
+arize-phoenix-client>=1.21.0
+
+# Data processing
+pandas>=2.0.0
+
+# Environment configuration
+python-dotenv>=1.0.0
+
+# Optional: For enhanced data analysis
+# numpy>=1.24.0
+# matplotlib>=3.7.0  
+# seaborn>=0.12.0    

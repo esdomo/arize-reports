@@ -36,8 +36,14 @@ python example_usage.py
 # Analyze a specific session (generates all three reports)
 python session_analyzer.py <session-id>
 
+# Run batch reports for time window (daily, weekly, etc.)
+python batch_reporter.py --window daily
+python batch_reporter.py --window weekly --reports "session_summary,cost"
+python batch_reporter.py --start "2025-11-18T00:00:00" --end "2025-11-19T00:00:00"
+
 # Run in Python REPL
 python -c "from session_analyzer import SessionAnalyzer; analyzer = SessionAnalyzer(); results = analyzer.generate_all_reports('session-id')"
+python -c "from batch_reporter import BatchReporter; reporter = BatchReporter(); results = reporter.run_window('daily')"
 ```
 
 ## Architecture
@@ -61,6 +67,25 @@ SessionAnalyzer(base_url, api_key, output_dir)
 - **File-based persistence:** Reports save to `outputs/{session_id}/` as JSON summaries + CSV dataframes with timestamps
 - **Error resilience:** `_safe_sum()` returns 0 for missing columns; fallback to `MODEL_PRICING` table when Phoenix lacks cost data
 - **Unprefixed attribute names:** When using `.select()`, pass unprefixed names like `"llm.model_name"` (not `"attributes.llm.model_name"`). Returned DataFrame columns are also unprefixed.
+
+### BatchReporter Class (Time-Windowed Analytics)
+
+Batch report generator (`batch_reporter.py`) for platform-wide analytics over time windows:
+
+```python
+BatchReporter(base_url, api_key, output_dir)
+├── run_batch()             # Generate reports for custom time range
+├── run_window()            # Generate reports for predefined window (daily, weekly, etc.)
+├── _session_summary_report()   # Sessions, traces, duration, daily breakdown
+├── _conversation_export()      # Full transcripts as CSV
+├── _cost_analysis_report()     # By model/provider, cache efficiency, failed costs
+├── _engagement_report()        # Hourly/daily patterns, tool/model usage
+└── _top_sessions_report()      # Top by cost, duration, tokens, errors
+```
+
+**Time Windows:** hourly, daily, weekly, monthly, or custom start/end
+
+**Output:** `batch_outputs/{date_range}_batch/` with JSON summaries, CSV data, and batch manifest
 
 ### Data Flow
 
@@ -104,6 +129,33 @@ See docstring in `session_analyzer.py` (lines 10-44) for complete attribute list
 - Tool usage breakdown
 - Temporal analysis (session duration, spans/minute, peak usage)
 
+## Batch Reports (Time-Windowed)
+
+### Session Summary
+- Total sessions, traces, spans in time window
+- Average session duration
+- Daily breakdown of activity
+
+### Conversation Export
+- Full human/AI message transcripts
+- CSV format with session_id, trace_id, timestamp, messages, model, tokens
+
+### Cost Analysis
+- Total cost by model and provider
+- Token usage breakdown (prompt, completion, cache)
+- Cache efficiency and estimated savings
+- Failed request costs
+
+### Engagement Patterns
+- Hourly and daily usage distribution
+- Peak usage times
+- Tool and model usage frequency
+- Session length statistics
+
+### Top Sessions
+- Top N sessions by cost, duration, tokens
+- Sessions with errors
+
 ## Cost Estimation
 
 Hardcoded `MODEL_PRICING` table (line ~250 in session_analyzer.py) provides fallback pricing when Phoenix lacks cost data:
@@ -119,20 +171,30 @@ GPT-3.5 Turbo: $0.0005/1K prompt, $0.0015/1K completion
 
 ```
 arize_reporter/
-├── session_analyzer.py         # Main SessionAnalyzer class (671 lines)
-├── example_usage.py            # 5 documented usage examples
+├── session_analyzer.py         # Main SessionAnalyzer class (900+ lines)
+├── batch_reporter.py           # BatchReporter for time-windowed analytics (800+ lines)
+├── example_usage.py            # Documented usage examples
 ├── test.py                     # Comprehensive test suite
 ├── requirements.txt            # Python dependencies
 ├── example.env                 # Environment template
 ├── .env                        # Actual config (git-ignored)
 ├── docs/
-│   ├── readme.md               # Full API documentation
-│   └── plans/2025-11-03-session-analyzer-redesign.md  # Design document
+│   └── plans/                  # Design documents
+│       ├── 2025-11-19-batch-report-system.md
+│       └── 2025-11-19-batch-report-implementation.md
 ├── scripts/session_analyze.py  # Jupyter notebook analysis
-└── outputs/                    # Report storage (git-ignored)
-    └── {session_id}/
-        ├── {report_type}_summary_{timestamp}.json
-        └── {report_type}_data_{timestamp}.csv
+├── outputs/                    # Per-session reports (git-ignored)
+│   └── {session_id}/
+│       ├── {report_type}_summary_{timestamp}.json
+│       └── {report_type}_data_{timestamp}.csv
+└── batch_outputs/              # Batch reports (git-ignored)
+    └── {date_range}_batch/
+        ├── session_summary_{timestamp}.json
+        ├── cost_analysis_{timestamp}.json
+        ├── engagement_{timestamp}.json
+        ├── top_sessions_{timestamp}.json
+        ├── conversations_{timestamp}.csv
+        └── batch_manifest.json
 ```
 
 ## Environment Variables

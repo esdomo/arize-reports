@@ -11,6 +11,11 @@ Features demonstrated:
 - Custom analysis on fetched dataframes
 """
 
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 from session_analyzer import SessionAnalyzer
 
 
@@ -224,6 +229,94 @@ def example_5_fetch_all_attributes():
         print(f"❌ Error: {e}")
 
 
+def example_6_conversation_extraction():
+    """Example 6: Extract conversation pairs from a session."""
+    print("\n" + "="*80)
+    print("EXAMPLE 6: Conversation Extraction")
+    print("="*80)
+
+    session_id = "stream-f1894cc2-dede-4416-8db7-06b87fd65040"
+
+    try:
+        analyzer = SessionAnalyzer()
+
+        # Extract conversations for a single session
+        print(f"\nExtracting conversations for: {session_id}")
+        result = analyzer.extract_conversation_data(session_id=session_id)
+
+        print(f"\n✅ Extraction complete!")
+        print(f"  Total conversations: {result['summary']['total_conversations']}")
+        print(f"  Sessions analyzed: {result['summary']['sessions_analyzed']}")
+        print(f"  CSV file: {result['files']['csv_file']}")
+
+        # Load and inspect the CSV
+        import pandas as pd
+        df = pd.read_csv(result["files"]["csv_file"])
+        print(f"\n📊 Extracted Data:")
+        print(f"  Rows: {len(df)}")
+        print(f"  Columns: {', '.join(df.columns.tolist())}")
+
+        # Show sample data
+        if len(df) > 0:
+            print(f"\nSample rows (first conversation)::")
+            sample = df.iloc[0]
+            human_msg = str(sample['human']) if pd.notna(sample['human']) else "(empty)"
+            ai_msg = str(sample['ai']) if pd.notna(sample['ai']) else "(empty)"
+            print(f"  Human: {human_msg[:100]}..." if len(human_msg) > 100 else f"  Human: {human_msg}")
+            print(f"  AI: {ai_msg[:100]}..." if len(ai_msg) > 100 else f"  AI: {ai_msg}")
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+
+
+def example_6b_conversation_extraction_all_sessions():
+    """Example 6b: Extract conversations from all sessions."""
+    print("\n" + "="*80)
+    print("EXAMPLE 6B: Conversation Extraction - All Sessions")
+    print("="*80)
+
+    try:
+        analyzer = SessionAnalyzer()
+
+        # Extract conversations from all sessions (no session_id specified)
+        print(f"\nExtracting conversations from all sessions...")
+        result = analyzer.extract_conversation_data()
+
+        print(f"\n✅ Extraction complete!")
+        print(f"  Total conversations: {result['summary']['total_conversations']}")
+        print(f"  Sessions analyzed: {result['summary']['sessions_analyzed']}")
+        print(f"  CSV file: {result['files']['csv_file']}")
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+
+
+def example_6c_conversation_extraction_multiple_sessions():
+    """Example 6c: Extract conversations from multiple specific sessions."""
+    print("\n" + "="*80)
+    print("EXAMPLE 6C: Conversation Extraction - Multiple Sessions")
+    print("="*80)
+
+    session_ids = [
+        "stream-f1894cc2-dede-4416-8db7-06b87fd65040",
+        "postman-31bf6ed1-9b9b-4e48-a0a4-7b408f03cf25"
+    ]
+
+    try:
+        analyzer = SessionAnalyzer()
+
+        for session_id in session_ids:
+            # Extract conversations for each session
+            print(f"\nExtracting conversations for: {session_id}")
+            result = analyzer.extract_conversation_data(session_id=session_id)
+
+            print(f"  ✅ Total conversations: {result['summary']['total_conversations']}")
+            print(f"  CSV file: {result['files']['csv_file']}")
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+
+
 def main():
     """Run all examples."""
     print("\n" + "🚀 " + "="*76)
@@ -231,7 +324,10 @@ def main():
     print("="*78 + " 🚀\n")
 
     # Run Example 1: Generate all reports
-    example_1_generate_all_reports()
+    # example_1_generate_all_reports()
+
+    # Run Example 6: Conversation extraction
+    example_6_conversation_extraction()
 
     # Run Example 2: Individual reports
     # Uncomment to run:
@@ -248,6 +344,14 @@ def main():
     # Run Example 5: Fetch all attributes
     # Uncomment to run:
     # example_5_fetch_all_attributes()
+
+    # Run Example 6B: Conversation extraction - all sessions
+    # Uncomment to run:
+    # example_6b_conversation_extraction_all_sessions()
+
+    # Run Example 6C: Conversation extraction - multiple sessions
+    # Uncomment to run:
+    # example_6c_conversation_extraction_multiple_sessions()
 
     print("\n" + "="*80)
     print("💡 TIP: Edit the session IDs in this file to analyze your own sessions")

@@ -1,0 +1,596 @@
+{
+  "messages": [
+    {
+      "content": "Hey, what can you do?",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "human",
+      "name": null,
+      "id": "e74413d7-4d4f-404c-ad51-5fa8f43e9053"
+    },
+    {
+      "content": "Hello! I'm here to assist you with campaign analysis and brand location intelligence. I can help analyze advertising campaigns, optimize creative strategies, and provide insights on brand locations and market presence. If you have specific questions or tasks related to campaigns or brand proximity, feel free to ask!",
+      "additional_kwargs": {
+        "refusal": null
+      },
+      "response_metadata": {
+        "token_usage": {
+          "completion_tokens": 56,
+          "prompt_tokens": 1707,
+          "total_tokens": 1763,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cached_tokens": 0
+          }
+        },
+        "model_provider": "openai",
+        "model_name": "gpt-4o-mini-2024-07-18",
+        "system_fingerprint": "fp_51db84afab",
+        "id": "chatcmpl-CaLnqosb3TD1b53DbRrEz1I70DTe4",
+        "service_tier": "default",
+        "finish_reason": "stop",
+        "logprobs": null
+      },
+      "type": "ai",
+      "name": null,
+      "id": "lc_run--3ee7bbc7-e2d6-42ef-a9a1-d99f9ca5c199-0",
+      "tool_calls": [],
+      "invalid_tool_calls": [],
+      "usage_metadata": {
+        "input_tokens": 1707,
+        "output_tokens": 56,
+        "total_tokens": 1763,
+        "input_token_details": {
+          "audio": 0,
+          "cache_read": 0
+        },
+        "output_token_details": {
+          "audio": 0,
+          "reasoning": 0
+        }
+      }
+    },
+    {
+      "content": "Can you give me the locations for McDonald's in the UK?",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "human",
+      "name": null,
+      "id": "1b978d7c-1944-449b-ba97-0295045efd61"
+    },
+    {
+      "content": "",
+      "additional_kwargs": {
+        "refusal": null
+      },
+      "response_metadata": {
+        "token_usage": {
+          "completion_tokens": 46,
+          "prompt_tokens": 1783,
+          "total_tokens": 1829,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cached_tokens": 1664
+          }
+        },
+        "model_provider": "openai",
+        "model_name": "gpt-4o-mini-2024-07-18",
+        "system_fingerprint": "fp_51db84afab",
+        "id": "chatcmpl-CaLo94SjWqGaM2ZbedeRAqld5vU9E",
+        "service_tier": "default",
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      },
+      "type": "ai",
+      "name": null,
+      "id": "lc_run--405feb58-19bf-4ff6-9857-0539920a47a7-0",
+      "tool_calls": [
+        {
+          "name": "route_proximity",
+          "args": {
+            "proximity_request": "McDonald's locations in the UK",
+            "confidence": 0.9,
+            "reasoning": "User is requesting brand location intelligence for McDonald's in a specific country."
+          },
+          "id": "call_oMpGTXknFj9MR4xgP66bzFD1",
+          "type": "tool_call"
+        }
+      ],
+      "invalid_tool_calls": [],
+      "usage_metadata": {
+        "input_tokens": 1783,
+        "output_tokens": 46,
+        "total_tokens": 1829,
+        "input_token_details": {
+          "audio": 0,
+          "cache_read": 1664
+        },
+        "output_token_details": {
+          "audio": 0,
+          "reasoning": 0
+        }
+      }
+    },
+    {
+      "content": "{\"routed_to\": \"proximity\", \"summary\": \"Hello! I use Mobsta's database for proximity analysis. I can help with tasks like competitor comparisons, nearby-brand rankings, and campaign diagnostics.\\n\\nTo analyze McDonald's locations in the UK, I need a bit more information:\\n- Would you like to provide a list of competitors, or should I recommend some for you?\\n- What radii (in meters) would you like to use for the analysis? Common choices are 100, 200, and 500 meters.\\n\\nLet me know how you'd like to proceed!\", \"latency_ms\": 7480.06, \"n_msgs\": 4}",
+      "additional_kwargs": {
+        "kind": "subgraph",
+        "metrics": {
+          "query": "Can you give me the locations for McDonald's in the UK?",
+          "confidence": 0.9,
+          "route": "proximity",
+          "reason": "User is requesting brand location intelligence for McDonald's in a specific country."
+        }
+      },
+      "response_metadata": {},
+      "type": "tool",
+      "name": "route_proximity",
+      "id": "33e065e2-e53c-4d88-b09d-913e3bbf42fd",
+      "tool_call_id": "call_oMpGTXknFj9MR4xgP66bzFD1",
+      "artifact": null,
+      "status": "success"
+    },
+    {
+      "content": "I can help analyze McDonald's locations in the UK using our database. To proceed, I need a bit more information:\n\n1. Would you like to provide a list of competitors, or should I recommend some for you?\n2. What radii (in meters) would you like to use for the analysis? Common choices are 100, 200, and 500 meters.\n\nLet me know how you'd like to proceed!",
+      "additional_kwargs": {
+        "refusal": null
+      },
+      "response_metadata": {
+        "token_usage": {
+          "completion_tokens": 86,
+          "prompt_tokens": 1979,
+          "total_tokens": 2065,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cached_tokens": 1792
+          }
+        },
+        "model_provider": "openai",
+        "model_name": "gpt-4o-mini-2024-07-18",
+        "system_fingerprint": "fp_51db84afab",
+        "id": "chatcmpl-CaLoJN30pP8WWETrN8Xz4A1U0SIyl",
+        "service_tier": "default",
+        "finish_reason": "stop",
+        "logprobs": null
+      },
+      "type": "ai",
+      "name": null,
+      "id": "lc_run--53776cc9-6572-44f6-84cf-554f3745233f-0",
+      "tool_calls": [],
+      "invalid_tool_calls": [],
+      "usage_metadata": {
+        "input_tokens": 1979,
+        "output_tokens": 86,
+        "total_tokens": 2065,
+        "input_token_details": {
+          "audio": 0,
+          "cache_read": 1792
+        },
+        "output_token_details": {
+          "audio": 0,
+          "reasoning": 0
+        }
+      }
+    },
+    {
+      "content": "What are my comptetitors? Which area should I cover based on McDonalds references",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "human",
+      "name": null,
+      "id": "6a9aee4a-829c-49bf-ad22-1520cb8ede96"
+    },
+    {
+      "content": "",
+      "additional_kwargs": {
+        "refusal": null
+      },
+      "response_metadata": {
+        "token_usage": {
+          "completion_tokens": 53,
+          "prompt_tokens": 2089,
+          "total_tokens": 2142,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cached_tokens": 2048
+          }
+        },
+        "model_provider": "openai",
+        "model_name": "gpt-4o-mini-2024-07-18",
+        "system_fingerprint": "fp_51db84afab",
+        "id": "chatcmpl-CaLprchUUXGXADO88xiPopvaEW9yp",
+        "service_tier": "default",
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      },
+      "type": "ai",
+      "name": null,
+      "id": "lc_run--4bc2c696-0dc3-4086-9f96-332ad37c3261-0",
+      "tool_calls": [
+        {
+          "name": "route_proximity",
+          "args": {
+            "proximity_request": "Competitors of McDonald's in the UK and recommended areas for analysis",
+            "confidence": 0.85,
+            "reasoning": "User is seeking competitor information and area coverage based on McDonald's locations."
+          },
+          "id": "call_LL7ZpH6gWWYlgd0IB0sfjhbr",
+          "type": "tool_call"
+        }
+      ],
+      "invalid_tool_calls": [],
+      "usage_metadata": {
+        "input_tokens": 2089,
+        "output_tokens": 53,
+        "total_tokens": 2142,
+        "input_token_details": {
+          "audio": 0,
+          "cache_read": 2048
+        },
+        "output_token_details": {
+          "audio": 0,
+          "reasoning": 0
+        }
+      }
+    },
+    {
+      "content": "{\"routed_to\": \"proximity\", \"summary\": \"Here are some recommended competitors for McDonald's in the UK, along with their point of interest (POI) counts:\\n\\n1. **Costa Express** - 14,465 POIs\\n2. **Gregg's** - 2,926 POIs\\n3. **Costa Coffee** - 2,739 POIs\\n4. **Subway** - 2,360 POIs\\n5. **Starbucks** - 1,441 POIs\\n6. **Domino's Pizza** - 1,324 POIs\\n7. **KFC** - 1,106 POIs\\n8. **Greene King Pub** - 1,030 POIs\\n\\nFor the analysis, common radii choices are 100, 200, and 500 meters. Would you like to proceed with these competitors and radii, or make any adjustments?\", \"latency_ms\": 19108.31, \"n_msgs\": 10}",
+      "additional_kwargs": {
+        "kind": "subgraph",
+        "metrics": {
+          "query": "What are my comptetitors? Which area should I cover based on McDonalds references",
+          "confidence": 0.85,
+          "route": "proximity",
+          "reason": "User is seeking competitor information and area coverage based on McDonald's locations."
+        }
+      },
+      "response_metadata": {},
+      "type": "tool",
+      "name": "route_proximity",
+      "id": "1a982410-0384-4748-b3fb-795dcd59774d",
+      "tool_call_id": "call_LL7ZpH6gWWYlgd0IB0sfjhbr",
+      "artifact": null,
+      "status": "success"
+    },
+    {
+      "content": "Here are some recommended competitors for McDonald's in the UK, along with their point of interest (POI) counts:\n\n1. **Costa Express** - 14,465 POIs\n2. **Gregg's** - 2,926 POIs\n3. **Costa Coffee** - 2,739 POIs\n4. **Subway** - 2,360 POIs\n5. **Starbucks** - 1,441 POIs\n6. **Domino's Pizza** - 1,324 POIs\n7. **KFC** - 1,106 POIs\n8. **Greene King Pub** - 1,030 POIs\n\nFor the analysis, common radii choices are 100, 200, and 500 meters. Would you like to proceed with these competitors and radii, or would you like to make any adjustments?",
+      "additional_kwargs": {
+        "refusal": null
+      },
+      "response_metadata": {
+        "token_usage": {
+          "completion_tokens": 183,
+          "prompt_tokens": 2363,
+          "total_tokens": 2546,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cached_tokens": 2048
+          }
+        },
+        "model_provider": "openai",
+        "model_name": "gpt-4o-mini-2024-07-18",
+        "system_fingerprint": "fp_51db84afab",
+        "id": "chatcmpl-CaLqCaRFXmOFFhVHemhE8e3eBCAoE",
+        "service_tier": "default",
+        "finish_reason": "stop",
+        "logprobs": null
+      },
+      "type": "ai",
+      "name": null,
+      "id": "lc_run--c13e5fe1-96ee-40e6-b87e-34a5449ae484-0",
+      "tool_calls": [],
+      "invalid_tool_calls": [],
+      "usage_metadata": {
+        "input_tokens": 2363,
+        "output_tokens": 183,
+        "total_tokens": 2546,
+        "input_token_details": {
+          "audio": 0,
+          "cache_read": 2048
+        },
+        "output_token_details": {
+          "audio": 0,
+          "reasoning": 0
+        }
+      }
+    },
+    {
+      "content": "Go ahead",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "human",
+      "name": null,
+      "id": "4ad36f25-b0f7-4d25-a236-dc5fafd5fcd0"
+    },
+    {
+      "content": "",
+      "additional_kwargs": {
+        "refusal": null
+      },
+      "response_metadata": {
+        "token_usage": {
+          "completion_tokens": 85,
+          "prompt_tokens": 2555,
+          "total_tokens": 2640,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cached_tokens": 2432
+          }
+        },
+        "model_provider": "openai",
+        "model_name": "gpt-4o-mini-2024-07-18",
+        "system_fingerprint": "fp_51db84afab",
+        "id": "chatcmpl-CaLqfe0N76Ly5IhtEfEe0Q2JEem40",
+        "service_tier": "default",
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      },
+      "type": "ai",
+      "name": null,
+      "id": "lc_run--eba4c2cb-3c52-4bdf-b189-7808fbaf1524-0",
+      "tool_calls": [
+        {
+          "name": "route_proximity",
+          "args": {
+            "proximity_request": "Analyze McDonald's locations in the UK with competitors Costa Express, Gregg's, Costa Coffee, Subway, Starbucks, Domino's Pizza, KFC, and Greene King Pub within 100, 200, and 500 meters.",
+            "confidence": 0.95,
+            "reasoning": "User confirmed to proceed with the specified competitors and radii for proximity analysis."
+          },
+          "id": "call_OTpvhe0N5E3komak2wa46uTd",
+          "type": "tool_call"
+        }
+      ],
+      "invalid_tool_calls": [],
+      "usage_metadata": {
+        "input_tokens": 2555,
+        "output_tokens": 85,
+        "total_tokens": 2640,
+        "input_token_details": {
+          "audio": 0,
+          "cache_read": 2432
+        },
+        "output_token_details": {
+          "audio": 0,
+          "reasoning": 0
+        }
+      }
+    },
+    {
+      "content": "{\"routed_to\": \"proximity\", \"summary\": \"### Proximity Analysis Summary\\n\\n#### Competitor Proximity Table\\n\\n| Competitor       | Radius (m) | Total | Within | % Within |\\n|------------------|------------|-------|--------|----------|\\n| KFC              | 100        | 1,106 | 215    | 19.44    |\\n| Starbucks        | 100        | 1,441 | 160    | 11.10    |\\n| Costa Coffee     | 100        | 2,739 | 290    | 10.59    |\\n| Gregg's          | 100        | 2,926 | 274    | 9.36     |\\n| Subway           | 100        | 2,360 | 209    | 8.86     |\\n| Domino's Pizza   | 100        | 1,324 | 62     | 4.68     |\\n| Greene King Pub  | 100        | 1,030 | 31     | 3.01     |\\n| Costa Express    | 100        | 14,465| 356    | 2.46     |\\n| KFC              | 200        | 1,106 | 368    | 33.27    |\\n| Starbucks        | 200        | 1,441 | 383    | 26.58    |\\n| Costa Coffee     | 200        | 2,739 | 601    | 21.94    |\\n| Gregg's          | 200        | 2,926 | 604    | 20.64    |\\n| Subway           | 200        | 2,360 | 459    | 19.45    |\\n| Domino's Pizza   | 200        | 1,324 | 141    | 10.65    |\\n| Greene King Pub  | 200        | 1,030 | 93     | 9.03     |\\n| Costa Express    | 200        | 14,465| 827    | 5.72     |\\n| KFC              | 500        | 1,106 | 598    | 54.07    |\\n| Starbucks        | 500        | 1,441 | 689    | 47.81    |\\n| Costa Coffee     | 500        | 2,739 | 1,157  | 42.24    |\\n| Gregg's          | 500        | 2,926 | 1,067  | 36.47    |\\n| Subway           | 500        | 2,360 | 830    | 35.17    |\\n| Domino's Pizza   | 500        | 1,324 | 297    | 22.43    |\\n| Greene King Pub  | 500        | 1,030 | 220    | 21.36    |\\n| Costa Express    | 500        | 14,465| 2,046  | 14.14    |\\n\\n#### Insights\\n\\nKFC leads at 100m and 200m radii, with 19.44% and 33.27% within proximity, respectively. At 500m, KFC maintains top performance with 54.07%. Starbucks shows consistent strength across all radii, with a notable 47.81% at 500m. Domino's Pizza is a \\\"sleeper,\\\" with only 1,324 total but a 22.43% within 500m. Notably, Costa Express has the highest total (14,465) but low proximity percentages, suggesting potential for targeted expansion. The % delta for KFC from 100m to 500m is 34.63%, indicating significant competitive presence expansion. \\n\\nWould you like to see these locations on an interactive map? I can generate one now.\", \"latency_ms\": 36164.7, \"n_msgs\": 15}",
+      "additional_kwargs": {
+        "kind": "subgraph",
+        "metrics": {
+          "query": "Go ahead",
+          "confidence": 0.95,
+          "route": "proximity",
+          "reason": "User confirmed to proceed with the specified competitors and radii for proximity analysis."
+        }
+      },
+      "response_metadata": {},
+      "type": "tool",
+      "name": "route_proximity",
+      "id": "6e222ab5-6f9a-41da-8cc3-263214a85010",
+      "tool_call_id": "call_OTpvhe0N5E3komak2wa46uTd",
+      "artifact": null,
+      "status": "success"
+    },
+    {
+      "content": "### Proximity Analysis Summary\n\n#### Competitor Proximity Table\n\n| Competitor       | Radius (m) | Total | Within | % Within |\n|------------------|------------|-------|--------|----------|\n| KFC              | 100        | 1,106 | 215    | 19.44    |\n| Starbucks        | 100        | 1,441 | 160    | 11.10    |\n| Costa Coffee     | 100        | 2,739 | 290    | 10.59    |\n| Gregg's          | 100        | 2,926 | 274    | 9.36     |\n| Subway           | 100        | 2,360 | 209    | 8.86     |\n| Domino's Pizza   | 100        | 1,324 | 62     | 4.68     |\n| Greene King Pub  | 100        | 1,030 | 31     | 3.01     |\n| Costa Express    | 100        | 14,465| 356    | 2.46     |\n| KFC              | 200        | 1,106 | 368    | 33.27    |\n| Starbucks        | 200        | 1,441 | 383    | 26.58    |\n| Costa Coffee     | 200        | 2,739 | 601    | 21.94    |\n| Gregg's          | 200        | 2,926 | 604    | 20.64    |\n| Subway           | 200        | 2,360 | 459    | 19.45    |\n| Domino's Pizza   | 200        | 1,324 | 141    | 10.65    |\n| Greene King Pub  | 200        | 1,030 | 93     | 9.03     |\n| Costa Express    | 200        | 14,465| 827    | 5.72     |\n| KFC              | 500        | 1,106 | 598    | 54.07    |\n| Starbucks        | 500        | 1,441 | 689    | 47.81    |\n| Costa Coffee     | 500        | 2,739 | 1,157  | 42.24    |\n| Gregg's          | 500        | 2,926 | 1,067  | 36.47    |\n| Subway           | 500        | 2,360 | 830    | 35.17    |\n| Domino's Pizza   | 500        | 1,324 | 297    | 22.43    |\n| Greene King Pub  | 500        | 1,030 | 220    | 21.36    |\n| Costa Express    | 500        | 14,465| 2,046  | 14.14    |\n\n#### Insights\n\n- **KFC** leads at 100m and 200m radii, with 19.44% and 33.27% within proximity, respectively. At 500m, KFC maintains top performance with 54.07%.\n- **Starbucks** shows consistent strength across all radii, with a notable 47.81% at 500m.\n- **Domino's Pizza** has a lower total but a 22.43% presence within 500m, indicating potential.\n- **Costa Express** has the highest total (14,465) but low proximity percentages, suggesting opportunities for targeted expansion.\n\nWould you like to see these locations on an interactive map? I can generate one now.",
+      "additional_kwargs": {
+        "refusal": null
+      },
+      "response_metadata": {
+        "token_usage": {
+          "completion_tokens": 774,
+          "prompt_tokens": 3507,
+          "total_tokens": 4281,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cached_tokens": 2560
+          }
+        },
+        "model_provider": "openai",
+        "model_name": "gpt-4o-mini-2024-07-18",
+        "system_fingerprint": "fp_51db84afab",
+        "id": "chatcmpl-CaLrI4EIZkmLmR8tHiO2ttHtLU7EW",
+        "service_tier": "default",
+        "finish_reason": "stop",
+        "logprobs": null
+      },
+      "type": "ai",
+      "name": null,
+      "id": "lc_run--22b4dcda-9e15-4584-b59c-ec524ce71a6c-0",
+      "tool_calls": [],
+      "invalid_tool_calls": [],
+      "usage_metadata": {
+        "input_tokens": 3507,
+        "output_tokens": 774,
+        "total_tokens": 4281,
+        "input_token_details": {
+          "audio": 0,
+          "cache_read": 2560
+        },
+        "output_token_details": {
+          "audio": 0,
+          "reasoning": 0
+        }
+      }
+    },
+    {
+      "content": "How should I build a brief for my McDonalds campaing?",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "human",
+      "name": null,
+      "id": "5154c54e-a0ec-49de-baf7-44d1cf39e224"
+    },
+    {
+      "content": "",
+      "additional_kwargs": {
+        "refusal": null
+      },
+      "response_metadata": {
+        "token_usage": {
+          "completion_tokens": 151,
+          "prompt_tokens": 4302,
+          "total_tokens": 4453,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cached_tokens": 4224
+          }
+        },
+        "model_provider": "openai",
+        "model_name": "gpt-4o-mini-2024-07-18",
+        "system_fingerprint": "fp_51db84afab",
+        "id": "chatcmpl-CaLuKYZ3h0cRCLO0fhTsDLuabUsje",
+        "service_tier": "default",
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      },
+      "type": "ai",
+      "name": null,
+      "id": "lc_run--eecd5268-31c1-4eee-b926-997ce406e0a5-0",
+      "tool_calls": [
+        {
+          "name": "route_campaign",
+          "args": {
+            "campaign_context": "Developing a campaign brief for McDonald's. The campaign aims to increase brand awareness and drive foot traffic to locations. Target audience includes families and young adults aged 18-35. The main message should focus on value and quality of food. Key campaign keywords include 'value meals', 'family-friendly', and 'quality ingredients'. Consumer insights should highlight the importance of convenience and affordability. The competitive landscape includes KFC, Subway, and Starbucks. Media channels will include digital advertising, social media, and outdoor advertising. No specific restrictions or guidelines.",
+            "confidence": 0.85,
+            "reasoning": "User is seeking guidance on building a campaign brief for McDonald's, which fits the campaign analysis workflow."
+          },
+          "id": "call_GVrFw52GI5NqU3UL5ZQEpCiV",
+          "type": "tool_call"
+        }
+      ],
+      "invalid_tool_calls": [],
+      "usage_metadata": {
+        "input_tokens": 4302,
+        "output_tokens": 151,
+        "total_tokens": 4453,
+        "input_token_details": {
+          "audio": 0,
+          "cache_read": 4224
+        },
+        "output_token_details": {
+          "audio": 0,
+          "reasoning": 0
+        }
+      }
+    },
+    {
+      "content": "{\"routed_to\": \"campaing\", \"summary\": \"The configuration outlines a marketing strategy for McDonald's, focusing on various datasets that capture demographic, lifestyle, consumption, and purchasing behaviors relevant to the target audience. The total weight assigned to all datasets is 8.0, indicating their collective importance in shaping the campaign.\\n\\n1. **Demographic Profile (Weight: 2.5)**: This dataset emphasizes young adults aged 18-34, with significant weights assigned to age categories (0.8 each for 18-24 and 25-34) and gender representation (0.3 for both males and females). The inclusion of individuals with an average income (50-60%) aligns with the campaign's focus on value and affordability.\\n\\n2. **Lifestyle and Preferences (Weight: 1.5)**: This dataset identifies interests such as movies, sports, and fitness, which resonate with the lifestyle of young adults and families. Each interest category is equally weighted (0.3), reflecting their importance in driving engagement and brand awareness.\\n\\n3. **Points of Interest (Weight: 1.0)**: This dataset categorizes brands and types of restaurants, with McDonald's being the primary focus. It includes subcategories like fast food and family dining, which are crucial for understanding competitive positioning.\\n\\n4. **Content Consumption (Weight: 1.0)**: This dataset highlights digital engagement behaviors, such as high usage of food delivery and online shopping, which are vital for the campaign's digital strategy.\\n\\n5. **Social Signals (Weight: 1.0)**: This dataset focuses on family values and dining behaviors, aligning with McDonald's objectives to attract family-oriented customers.\\n\\n6. **FMCG Purchase Behavior (Weight: 1.0)**: This dataset examines consumer preferences for snacks and beverages, relevant to fast food consumption and promoting value meals.\\n\\nOverall, the configuration strategically targets young adults and families, emphasizing convenience, value, and lifestyle preferences to enhance brand engagement and drive foot traffic to McDonald's locations.\", \"latency_ms\": 180150.75}",
+      "additional_kwargs": {
+        "kind": "subgraph",
+        "metrics": {
+          "query": "How should I build a brief for my McDonalds campaing?",
+          "confidence": 0.85,
+          "route": "campaing",
+          "reason": "User is seeking guidance on building a campaign brief for McDonald's, which fits the campaign analysis workflow."
+        }
+      },
+      "response_metadata": {},
+      "type": "tool",
+      "name": "route_campaign",
+      "id": "52ac46c7-80f4-4216-b70a-d7540dacdcec",
+      "tool_call_id": "call_GVrFw52GI5NqU3UL5ZQEpCiV",
+      "artifact": null,
+      "status": "success"
+    },
+    {
+      "content": "The configuration outlines a marketing strategy for McDonald's, focusing on various datasets that capture demographic, lifestyle, consumption, and purchasing behaviors relevant to the target audience. The total weight assigned to all datasets is 8.0, indicating their collective importance in shaping the campaign.\n\n1. **Demographic Profile (Weight: 2.5)**: This dataset emphasizes young adults aged 18-34, with significant weights assigned to age categories (0.8 each for 18-24 and 25-34) and gender representation (0.3 for both males and females). The inclusion of individuals with an average income (50-60%) aligns with the campaign's focus on value and affordability.\n\n2. **Lifestyle and Preferences (Weight: 1.5)**: This dataset identifies interests such as movies, sports, and fitness, which resonate with the lifestyle of young adults and families. Each interest category is equally weighted (0.3), reflecting their importance in driving engagement and brand awareness.\n\n3. **Points of Interest (Weight: 1.0)**: This dataset categorizes brands and types of restaurants, with McDonald's being the primary focus. It includes subcategories like fast food and family dining, which are crucial for understanding competitive positioning.\n\n4. **Content Consumption (Weight: 1.0)**: This dataset highlights digital engagement behaviors, such as high usage of food delivery and online shopping, which are vital for the campaign's digital strategy.\n\n5. **Social Signals (Weight: 1.0)**: This dataset focuses on family values and dining behaviors, aligning with McDonald's objectives to attract family-oriented customers.\n\n6. **FMCG Purchase Behavior (Weight: 1.0)**: This dataset examines consumer preferences for snacks and beverages, relevant to fast food consumption and promoting value meals.\n\nOverall, the configuration strategically targets young adults and families, emphasizing convenience, value, and lifestyle preferences to enhance brand engagement and drive foot traffic to McDonald's locations. \n\nIf you need further assistance or specific elements to include in your brief, feel free to ask!",
+      "additional_kwargs": {
+        "refusal": null
+      },
+      "response_metadata": {
+        "token_usage": {
+          "completion_tokens": 418,
+          "prompt_tokens": 4897,
+          "total_tokens": 5315,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cached_tokens": 4352
+          }
+        },
+        "model_provider": "openai",
+        "model_name": "gpt-4o-mini-2024-07-18",
+        "system_fingerprint": "fp_51db84afab",
+        "id": "chatcmpl-CaLxIPb41OisQ5QP0Fzspm33HTgsy",
+        "service_tier": "default",
+        "finish_reason": "stop",
+        "logprobs": null
+      },
+      "type": "ai",
+      "name": null,
+      "id": "lc_run--914b1fe4-2ac9-48ca-a1d6-0ee5d36bd4f1-0",
+      "tool_calls": [],
+      "invalid_tool_calls": [],
+      "usage_metadata": {
+        "input_tokens": 4897,
+        "output_tokens": 418,
+        "total_tokens": 5315,
+        "input_token_details": {
+          "audio": 0,
+          "cache_read": 4352
+        },
+        "output_token_details": {
+          "audio": 0,
+          "reasoning": 0
+        }
+      }
+    }
+  ]
+}

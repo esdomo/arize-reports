@@ -1,5 +1,8 @@
 # Arize Phoenix Session Cost Analyzer Requirements
 
+# Core langchaing (For message parsing)
+langchain_core
+
 # Core Phoenix packages
 arize-phoenix>=12.9.0
 arize-phoenix-client>=1.21.0

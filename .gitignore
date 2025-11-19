@@ -1,5 +1,8 @@
 .venv
 .claude
+.specify
+specs 
+
 __pycache__
 outputs
 docs

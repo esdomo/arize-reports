@@ -48,7 +48,7 @@ Attributes per span:
 import os
 import json
 from typing import Dict, Any, Optional, List
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 from phoenix.client import Client
@@ -60,14 +60,14 @@ import pandas as pd
 load_dotenv()
 
 
-
 # Standard model pricing (fallback when Phoenix doesn't provide costs)
 MODEL_PRICING = {
     "gpt-4": {"prompt": 0.03 / 1000, "completion": 0.06 / 1000},
     "gpt-4-turbo": {"prompt": 0.01 / 1000, "completion": 0.03 / 1000},
     "gpt-4-turbo-preview": {"prompt": 0.01 / 1000, "completion": 0.03 / 1000},
-    "gpt-4o": {"prompt": 0.00125 / 1000, "completion": 0.01 / 1000},
-    "gpt-4o-2024-08-06": {"prompt": 0.00375 / 1000, "completion": 0.015 / 1000},
+    "gpt-4o": {"prompt": 0.0025 / 1000, "completion": 0.01 / 1000},
+    # Review this version
+    "gpt-4o-2024-08-06": {"prompt": 0.0025 / 1000, "completion": 0.01 / 1000},
     "gpt-4o-mini": {"prompt": 0.00015 / 1000, "completion": 0.0006 / 1000},
     "gpt-3.5-turbo": {"prompt": 0.0005 / 1000, "completion": 0.0015 / 1000},
     "claude-3-opus-20240229": {"prompt": 0.015 / 1000, "completion": 0.075 / 1000},
@@ -115,33 +115,97 @@ class SessionAnalyzer:
 
     def fetch_session_spans(
         self,
-        session_id: str,
+        span_kind: Optional[str] = None,
+        session_id: Optional[str] = None,
         attributes: Optional[List[str]] = None,
         project_name: Optional[str] = None,
-        limit: int = 10000
+        limit: int = 10000,
+        start_time: Optional[datetime] = None,
+        end_time: Optional[datetime] = None
     ) -> pd.DataFrame:
         """
-        Fetch spans for a specific session from Phoenix.
+        Fetch spans by session ID, time range, or both.
+
+        Flexible span retrieval supporting three modes:
+        1. Single session: session_id provided (ignores time range)
+        2. Time range: start_time/end_time provided (all sessions in range)
+        3. Combined: Both session_id and time range for constrained query
 
         Args:
-            session_id: The session ID to fetch spans for
+            session_id: Optional session ID to filter. If None, requires time range.
             attributes: Optional list of attributes to select. If None, fetches ALL columns.
+                       Use unprefixed names (e.g., "llm.model_name" not "attributes.llm.model_name")
             project_name: Phoenix project name (defaults to PROJECT env var, or "default")
             limit: Maximum number of spans to fetch (default: 10000)
+            start_time: Optional start of time range (inclusive). If None and session_id is None,
+                       defaults to 24 hours ago.
+            end_time: Optional end of time range (exclusive). If None, defaults to now().
 
         Returns:
             pandas DataFrame with requested span data
+
+        Raises:
+            ValueError: If neither session_id nor start_time/end_time provided, or if
+                       start_time is after end_time.
+
+        Examples:
+            # Single session (existing behavior - backward compatible)
+            >>> df = analyzer.fetch_session_spans("session-123")
+
+            # Last 24 hours (default time range)
+            >>> df = analyzer.fetch_session_spans()
+
+            # Custom time range
+            >>> from datetime import datetime, timedelta
+            >>> end = datetime.now()
+            >>> start = end - timedelta(hours=6)
+            >>> df = analyzer.fetch_session_spans(start_time=start, end_time=end)
+
+            # Session + time range (constrained query)
+            >>> df = analyzer.fetch_session_spans(
+            ...     session_id="session-123",
+            ...     start_time=start,
+            ...     end_time=end
+            ... )
         """
-        query = SpanQuery().where(f"session.id == '{session_id}'")
+        # Validate inputs
+        if session_id is None and start_time is None and end_time is None:
+            # Default to last 24 hours if no filters provided
+            end_time = datetime.now()
+            start_time = end_time - timedelta(hours=24)
+
+        # If start_time provided but no end_time, use current time
+        if start_time is not None and end_time is None:
+            end_time = datetime.now()
+
+        # If end_time provided but no start_time, use 24 hours before end_time
+        if end_time is not None and start_time is None and session_id is None:
+            start_time = end_time - timedelta(hours=24)
+
+        # Validate time range
+        if start_time is not None and end_time is not None and start_time > end_time:
+            raise ValueError(f"start_time ({start_time}) must be before end_time ({end_time})")
+
+        # Build query
+        query = SpanQuery()
+
+        if span_kind:
+            query.where(f"span_kind == '{span_kind}'")
+        
+        if session_id:
+            query = query.where(f"session.id == '{session_id}'")
 
         if attributes:
             query = query.select(*attributes)
         # If attributes=None, Phoenix returns all available columns
 
+        # Fetch with optional time range filter
         df = self.client.spans.get_spans_dataframe(
             query=query,
             project_identifier=project_name or os.getenv("PROJECT", "default"),
-            limit=limit
+            limit=limit,
+            start_time=start_time,
+            end_time=end_time
         )
 
         return df
@@ -175,7 +239,7 @@ class SessionAnalyzer:
             "session.id"
         ]
 
-        df = self.fetch_session_spans(session_id, attributes, project_name)
+        df = self.fetch_session_spans(session_id,attributes=attributes,project_name=project_name)
 
         if df.empty:
             return self._empty_report(session_id, "core_cost")
@@ -474,28 +538,16 @@ class SessionAnalyzer:
         # Fetch required attributes (without "attributes." prefix for query)
         attributes = [
             "input.value",
-            "output.value",
             "context.span_id",
             "context.trace_id",
-            "parent_id",
             "session.id",
             "span_kind",
             "start_time",
             "end_time", 
-            "input.value",
-            "output.value",
             "metadata",
-            "llm.model_name",
-            "llm.input_messages",
-            "llm.output_messages",
-            "llm.token_count.total",
-            "llm.token_count.prompt",
-            "llm.token_count.prompt_details.cache_read",
-            "llm.token_count.completion_details.reasoning",
-            "llm.token_count.completion",
         ]
 
-        df = self.fetch_session_spans(session_id, attributes, project_name)
+        df = self.fetch_session_spans(session_id=session_id, attributes=attributes, project_name=project_name)
 
         if df.empty:
             return self._empty_report(session_id, "usage_patterns")
@@ -531,6 +583,98 @@ class SessionAnalyzer:
             "core_cost": self.core_cost_report(session_id, project_name),
             "efficiency": self.efficiency_report(session_id, project_name),
             "usage_patterns": self.usage_patterns_report(session_id, project_name)
+        }
+
+    def extract_conversation_data(
+        self,
+        session_id: Optional[str] = None,
+        project_name: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """
+        Extract human-AI conversation pairs from agent span input/output values.
+
+        """
+        # Build attributes list - only fetch what we need
+        attributes = [
+            "session.id",
+            "input.value",
+            "output.value"
+        ]
+
+        # Fetch spans with session_id filter if provided
+        try:
+            df = self.fetch_session_spans(
+                project_name=project_name or os.getenv("PROJECT", "default"),
+                attributes=attributes,
+                span_kind="AGENT",
+                session_id=session_id
+            )
+
+        except Exception as e:
+            raise ValueError(f"Failed to fetch spans: {str(e)}")
+
+        # Handle empty results
+        if df.empty:
+            # Create empty DataFrame with correct columns
+            empty_conversations = self._build_conversation_dataframe([])
+
+            # Determine output session ID for filename
+            output_session_id = session_id if session_id else "multiple"
+
+            # Save empty result
+            save_result = self._save_conversation_report(
+                output_session_id,
+                empty_conversations,
+                total_sessions=0
+            )
+
+            return {
+                "session_id": output_session_id,
+                "timestamp": datetime.now().isoformat(),
+                "summary": {
+                    "total_conversations": 0,
+                    "sessions_analyzed": 0
+                },
+                "files": {
+                    "csv_file": save_result["csv_file"]
+                },
+                "row_count": 0
+            }
+
+        # Extract conversations from spans
+        conversations = []
+        for _, row in df.iterrows():
+            conversation = self._extract_conversation_from_span(row)
+            if conversation["human"] or conversation["ai"]:  # Only add non-empty conversations
+                conversations.append(conversation)
+
+        # Build conversation DataFrame
+        conversation_df = self._build_conversation_dataframe(conversations)
+
+        # Determine output session ID for filename
+        output_session_id = session_id if session_id else "multiple"
+
+        # Count unique sessions
+        unique_sessions = df["session.id"].nunique() if "session.id" in df.columns else 1
+
+        # Save conversation report
+        save_result = self._save_conversation_report(
+            output_session_id,
+            conversation_df,
+            total_sessions=unique_sessions
+        )
+
+        return {
+            "session_id": output_session_id,
+            "timestamp": datetime.now().isoformat(),
+            "summary": {
+                "total_conversations": len(conversation_df),
+                "sessions_analyzed": unique_sessions
+            },
+            "files": {
+                "csv_file": save_result["csv_file"]
+            },
+            "row_count": len(conversation_df)
         }
 
     # Helper methods
@@ -629,13 +773,166 @@ class SessionAnalyzer:
             "row_count": 0
         }
 
+    def _extract_conversation_from_span(self, row: pd.Series) -> Dict[str, Any]:
+        """
+        Extract conversation pair from input.value and output.value.
+
+        Both input.value and output.value are JSON strings containing message arrays.
+        input.value contains the message history, output.value contains the AI response.
+
+        Args:
+            row: DataFrame row with span attributes
+
+        Returns:
+            Dict with keys "human" and "ai" containing message strings
+        """
+        human_msg = ""
+        ai_msg = ""
+
+        # Extract from input.value (message history)
+        try:
+            input_val = row.get("input.value")
+            if input_val is not None and (not isinstance(input_val, float) or not pd.isna(input_val)):
+                # Parse JSON string if needed
+                input_data = json.loads(input_val) if isinstance(input_val, str) else input_val
+
+                # Extract messages array
+                if isinstance(input_data, dict):
+                    messages = input_data.get("messages", [])
+                elif isinstance(input_data, list):
+                    messages = input_data
+                else:
+                    messages = []
+
+                # Find the last human message
+                for msg in reversed(messages):
+                    if isinstance(msg, dict):
+                        msg_type = msg.get("type", "").lower()
+                        if msg_type in ("human", "user"):
+                            human_msg = msg.get("content", "")
+                            break
+        except (json.JSONDecodeError, TypeError, AttributeError):
+            human_msg = ""
+
+        # Extract from output.value (AI response)
+        try:
+            output_val = row.get("output.value")
+            if output_val is not None and (not isinstance(output_val, float) or not pd.isna(output_val)):
+                # Parse JSON string if needed
+                output_data = json.loads(output_val) if isinstance(output_val, str) else output_val
+
+                # Handle direct messages format: {"messages": [...]}
+                if isinstance(output_data, dict) and "messages" in output_data:
+                    messages = output_data.get("messages", [])
+                    # Find the last AI message with content
+                    for msg in reversed(messages):
+                        if isinstance(msg, dict):
+                            msg_type = msg.get("type", "").lower()
+                            if msg_type in ("ai", "assistant"):
+                                content = msg.get("content", "").strip()
+                                if content:  # Only use if content is not empty
+                                    ai_msg = content
+                                    break
+
+                # Handle LangChain generations format: {"generations": [[[...]]]}
+                elif isinstance(output_data, dict) and "generations" in output_data:
+                    generations = output_data.get("generations", [])
+                    if generations and len(generations) > 0:
+                        for gen_list in generations:
+                            if isinstance(gen_list, list):
+                                for gen in gen_list:
+                                    if isinstance(gen, dict):
+                                        # Try to get content from message field
+                                        message = gen.get("message")
+                                        if isinstance(message, dict):
+                                            msg_type = message.get("type", "").lower()
+                                            if msg_type in ("ai", "assistant"):
+                                                kwargs = message.get("kwargs", {})
+                                                content = kwargs.get("content", "").strip()
+                                                if content:
+                                                    ai_msg = content
+                                                    break
+                                        # Also try direct text field
+                                        text = gen.get("text", "").strip()
+                                        if text:
+                                            ai_msg = text
+                                            break
+        except (json.JSONDecodeError, TypeError, AttributeError):
+            ai_msg = ""
+
+        return {
+            "human": human_msg,
+            "ai": ai_msg
+        }
+
+    def _build_conversation_dataframe(self, conversations: List[Dict[str, Any]]) -> pd.DataFrame:
+        """
+        Build DataFrame from conversation dictionaries.
+
+        Args:
+            conversations: List of conversation dictionaries with "human" and "ai" keys
+
+        Returns:
+            DataFrame with columns: human, ai
+        """
+        if not conversations:
+            return pd.DataFrame(columns=["human", "ai"])
+
+        df = pd.DataFrame(conversations)
+
+        # Ensure only human and ai columns
+        column_order = ["human", "ai"]
+        existing_columns = [col for col in column_order if col in df.columns]
+
+        # Select only the columns we need
+        df = df[existing_columns]
+
+        return df
+
+    def _save_conversation_report(
+        self,
+        session_id: str,
+        conversation_df: pd.DataFrame,
+        total_sessions: int = 1
+    ) -> Dict[str, Any]:
+        """
+        Save conversation CSV and return metadata.
+
+        Args:
+            session_id: Session ID or "multiple" for multi-session exports
+            conversation_df: DataFrame with conversation pairs
+            total_sessions: Number of unique sessions analyzed
+
+        Returns:
+            Dict with csv_file path
+        """
+        # Determine output directory
+        if session_id == "multiple":
+            output_path = Path(self.output_dir) / "multiple"
+        else:
+            output_path = Path(self.output_dir) / session_id
+
+        output_path.mkdir(parents=True, exist_ok=True)
+
+        # Generate filename
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        csv_filename = f"conversations_{session_id}_{timestamp}.csv"
+        csv_path = output_path / csv_filename
+
+        # Save CSV
+        conversation_df.to_csv(csv_path, index=False)
+
+        return {
+            "csv_file": str(csv_path)
+        }
+
 
 def main():
     """Example usage of SessionAnalyzer."""
     analyzer = SessionAnalyzer()
 
     # Example session ID - replace with your actual session ID
-    session_id = "postman-31bf6ed1-9b9b-4e48-a0a4-7b408f03cf25"
+    session_id = "stream-f1894cc2-dede-4416-8db7-06b87fd65040"
 
     try:
         # Generate all reports
